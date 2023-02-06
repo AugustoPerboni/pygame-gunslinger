@@ -7,20 +7,9 @@ window_width = 500
 window_hight = 480
 game_window = pygame.display.set_mode((window_width,window_hight))
 
-image_walk_right = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), 
-pygame.image.load('R3.png'), pygame.image.load('R4.png'), 
-pygame.image.load('R5.png'), pygame.image.load('R6.png'),
-pygame.image.load('R7.png'), pygame.image.load('R8.png'),
-pygame.image.load('R9.png')]
-
-image_walk_left = [pygame.image.load('L1.png'), pygame.image.load('L2.png'),
-pygame.image.load('L3.png'), pygame.image.load('L4.png'),
-pygame.image.load('L5.png'), pygame.image.load('L6.png'),
-pygame.image.load('L7.png'), pygame.image.load('L8.png'),
-pygame.image.load('L9.png')]
 
 background = pygame.image.load('bg.jpg')
-image_stop_character = pygame.image.load('standing.png')
+
 
 class element:
     def __init__(self,x,y,width,height,velocity):
@@ -41,6 +30,7 @@ class Enemy(element):
         self.walk_left = True
 
     def draw(self,window):
+        self.move()
         # Each image will be used in 3 frames
         if self.walk_count +1 >= 33:
             self.walk_count = 0
@@ -51,11 +41,38 @@ class Enemy(element):
             self.walk_count += 1
         elif self.walk_right:
             window.blit(self.image_walk_right[self.walk_count//3], (self.x,self.y))
-            self.walk_count += 1  
+            self.walk_count += 1 
+
+    def move(self):
+        if self.x <= self.width:
+            self.walk_left = False
+            self.walk_right = True
+            self.walk_count = 0
+        elif self.x >= window_width - self.width:
+            self.walk_left = True
+            self.walk_right = False
+            self.walk_count = 0
+
+        if self.walk_left:
+            self.x -= self.velocity
+        elif self.walk_right:
+            self.x += self.velocity
 
 
 
 class Player(element):
+    image_walk_right = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), 
+    pygame.image.load('R3.png'), pygame.image.load('R4.png'), 
+    pygame.image.load('R5.png'), pygame.image.load('R6.png'),
+    pygame.image.load('R7.png'), pygame.image.load('R8.png'),
+    pygame.image.load('R9.png')]
+
+    image_walk_left = [pygame.image.load('L1.png'), pygame.image.load('L2.png'),
+    pygame.image.load('L3.png'), pygame.image.load('L4.png'),
+    pygame.image.load('L5.png'), pygame.image.load('L6.png'),
+    pygame.image.load('L7.png'), pygame.image.load('L8.png'),
+    pygame.image.load('L9.png')]
+
     def __init__(self):
         element.__init__(self,50,400,40,60,5)
 
@@ -74,16 +91,16 @@ class Player(element):
                 self.walk_count = 0
             
             if self.walk_left:
-                window.blit(image_walk_left[self.walk_count//3], (self.x, self.y))
+                window.blit(self.image_walk_left[self.walk_count//3], (self.x, self.y))
                 self.walk_count += 1
             else:
-                window.blit(image_walk_right[self.walk_count//3], (self.x, self.y))
+                window.blit(self.image_walk_right[self.walk_count//3], (self.x, self.y))
                 self.walk_count += 1
         else:
             if self.walk_left:
-                window.blit(image_walk_left[self.walk_count//3], (self.x, self.y))
+                window.blit(self.image_walk_left[self.walk_count//3], (self.x, self.y))
             else:
-                window.blit(image_walk_right[self.walk_count//3], (self.x, self.y))
+                window.blit(self.image_walk_right[self.walk_count//3], (self.x, self.y))
             
 class projectile(element):
 
@@ -168,19 +185,7 @@ while prog_run:
             player.jump_count = 0 
             player.is_jump = False
     
-    if enemy.x <= enemy.width:
-        enemy.walk_left = False
-        enemy.walk_right = True
-        enemy.walk_count = 0
-    elif enemy.x >= window_width - enemy.width:
-        enemy.walk_left = True
-        enemy.walk_right = False
-        enemy.walk_count = 0
-
-    if enemy.walk_left:
-        enemy.x -= enemy.velocity
-    elif enemy.walk_right:
-        enemy.x += enemy.velocity
+    
 
     redraw_game_window(player,bullets,enemy,game_window)
                 
