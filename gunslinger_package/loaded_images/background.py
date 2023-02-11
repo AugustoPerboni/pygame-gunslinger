@@ -1,3 +1,3 @@
 import pygame
 
-background = pygame.image.load('images\\background\\old_town (Custom).jpg')
+background = pygame.image.load('images\\background\\bg(test).jpg')

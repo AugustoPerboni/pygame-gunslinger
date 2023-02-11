@@ -9,7 +9,7 @@ from gunslinger_package.loaded_images.player_images import *
 class Player(Element):
 
     def __init__(self):
-        Element.__init__(self,50,525,64,64,5,1)
+        Element.__init__(self,50,525,64,64,5,30)
 
         self.hitbox = (self.x + 38, self.y + 15, 66, 90)
         self.jump_count = 0
@@ -124,8 +124,9 @@ class Player(Element):
             self.stand = False
             self.walk_left = False
             self.walk_right = True
-            if self.x < window_width - 64 :
-                self.x += self.velocity           
+            # if self.x < window_width - 64 :
+            #     self.x += self.velocity  
+            self.x += self.velocity         
         else:
             if not self.is_jump:
                 self.stand = True
@@ -148,4 +149,4 @@ class Player(Element):
     
     def hit(self, damage):
         self.life -= damage
-        print('PLAYER HIT')
+        # print('PLAYER HIT')
