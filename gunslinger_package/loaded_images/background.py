@@ -1,3 +1,3 @@
 import pygame
 
-background = pygame.image.load('images\\background\\bg(test).jpg')
+background = pygame.image.load('images\\background\\mars-artic.png')

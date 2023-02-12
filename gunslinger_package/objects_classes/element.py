@@ -13,6 +13,8 @@ class Element:
         self.hitbox = ()
         self.life = 100
         self.life_color = ()
+        #self.life_bar_x = life_bar_x
+        # self.life_bar_y = life_bar_y
 
     def life_bar(self,window):
         ''' Find the respective color for the life value in the color scale.'''
@@ -26,6 +28,6 @@ class Element:
             self.life_color = (172,179,52)
         else:
             self.life_color = (105,179,76)
-        pygame.draw.rect(window,(0,0,0),(self.x + self.width/2.7,self.y - 10,100,10),2)
-        pygame.draw.rect(window,self.life_color,(self.x + self.width/2.7,self.y - 10,self.life,10))
+        pygame.draw.rect(window,(0,0,0),(self.life_bar_x,self.life_bar_y,100,10),2)
+        pygame.draw.rect(window,self.life_color,(self.life_bar_x,self.life_bar_y,self.life,10))
         

@@ -5,6 +5,8 @@ from gunslinger_package.config import *
 from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.objects_classes.projectile import Projectile
 from gunslinger_package.loaded_images.player_images import *
+from gunslinger_package.objects_classes.turret import Turret
+from gunslinger_package.functions import turret_insert_index
 
 class Player(Element):
 
@@ -15,7 +17,7 @@ class Player(Element):
         self.jump_count = 0
         self.is_jump = False 
         self.dead_count = 0
-        
+        self.turret_count = 0
         
         self.stand = True
         self.walk_left = False
@@ -23,9 +25,12 @@ class Player(Element):
         self.walk_count = 0
         self.shooting = False
         self.shoot_time_delay = 0
-        
+        self.life_bar_x = 66
+        self.life_bar_y = 525
+        self.money = 100
 
-    def draw(self,window):
+
+    def draw(self,window,keys):
         
         if self.life <= 0:
             if self.dead_count + 1 <= 24 and self.walk_right:
@@ -37,6 +42,8 @@ class Player(Element):
             else:
                 quit()
         else:
+            self.life_bar_x = self.x + self.width/2.7
+            self.life_bar_y = self.y 
             self.life_bar(window)
 
             if self.walk_count + 1 >= 21:
@@ -73,8 +80,9 @@ class Player(Element):
             self.hitbox = (self.x + 38, self.y + 15, 66, 90)         
             #pygame.draw.rect(window,(255,0,0),self.hitbox,2)
 
-    def move(self,bullets): 
-        '''Responsible for all the player moves and actions.
+    def move(self,bullets,turrets,keys): 
+        ''' 
+            Responsible for all the player moves and actions.
         
             Appends bullet to the list bullets
         '''
@@ -84,8 +92,19 @@ class Player(Element):
         else:
             self.shoot_time_delay += 1
 
-        global keys
-        keys = pygame.key.get_pressed()
+        
+        if self.turret_count >= 50:
+            self.turret_count = 0
+        elif self.turret_count == 0:
+            pass
+        else:
+            self.turret_count += 1
+
+        if keys[pygame.K_t] and self.turret_count == 0 and self.money >= 100: 
+            
+            turrets.append(Turret(self.x))
+            self.turret_count = 1
+            self.money -= 100
 
         if keys[pygame.K_SPACE] and self.shoot_time_delay == 0 and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_UP]:
             self.shooting = True
