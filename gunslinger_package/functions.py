@@ -4,15 +4,10 @@ from random import randint
 import sys
 sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
 
-from gunslinger_package.loaded_images.menu import *
-
-
-
-
+from gunslinger_package.loaded_images.menu_images import *
 from gunslinger_package.config import *
 from gunslinger_package.objects_classes.enemy import Enemy
 from gunslinger_package.loaded_images.brown_minotaur_images import brown_minotaur_images
-
 
 
 
@@ -76,7 +71,7 @@ def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,or
         player.x = 1100    
 
     window.blit(background,origin_background)
-    show_money(player,window,font)
+    show_money(player,window)
     
     
     # Update the image of bullets
@@ -94,7 +89,6 @@ def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,or
 
     # Draw player in the end to be infront of all the other objects 
     player.draw(window,keys)
-    pygame.display.update()
     return origin_background
 
 def wave_generator(enemies,wave_number):
@@ -108,7 +102,6 @@ def wave_generator(enemies,wave_number):
         power = randint(1,wave_number*2)
         enemies.append(Enemy(x,speed,power,brown_minotaur_images,'brown_minotaur'))
 
-
 def enemy_turret_collision(enemies,turrets):
     '''Change the is_hitting value in case of collision and call turret.hit() on the right animation time.'''
 
@@ -119,7 +112,6 @@ def enemy_turret_collision(enemies,turrets):
                 if enemy.hitting_count == 24:
                     turret.hit(enemy.power)
     
-
 def turret_insert_index(turrets,x):
     ''' Return the index of the element before of the desire position.
         The turrents list is sorted by position x in descending order 
@@ -133,9 +125,18 @@ def turret_insert_index(turrets,x):
         else:
             return len(turrets)
                 
-def show_money(player,window,font):
+def show_money(player,window):
     #window.blit(barra_coin,(window_width-195,15))
+    font = create_font(45)
     text = font.render(str(player.money) ,1,(255,255,0))
     window.blit(text,(window_width - 100, 25))
     window.blit(coin_image,(window_width-160,25))
     
+def mouse_turret_upgrade(turrets,player,window,font):
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for turret in turrets:
+        if (turret.hitbox[0] < mouse_x < turret.hitbox[0] + turret.hitbox[2] ) and (turret.hitbox[1] - 80  < mouse_y < turret.hitbox[1] + turret.hitbox[3] ):
+            turret.draw_menu_update(window,30,player,mouse_x,mouse_y)
+
+def create_font(font_size):
+    return pygame.font.SysFont("Times New Roman", font_size, True)

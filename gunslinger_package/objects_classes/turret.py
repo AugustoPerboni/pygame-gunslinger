@@ -1,3 +1,5 @@
+import pygame
+
 import sys
 sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
 
@@ -5,9 +7,12 @@ from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.loaded_images.turret_images import *
 from gunslinger_package.config import window_width
 from gunslinger_package.objects_classes.projectile import Projectile
+from gunslinger_package.loaded_images.menu_images import upgrade_button
+from gunslinger_package.functions import create_font
+
 
 class Turret(Element):
-
+    
     def __init__(self,x):
 
         Element.__init__(self,x,570,128,128,0.25,20)
@@ -21,26 +26,33 @@ class Turret(Element):
         self.life_bar_x = x
         self.life_bar_y = 545
         self.hitbox = (self.x,self.y,100,90)
+        self.update_price = 75
+        self.mouse_count = 0
 
     def level_update(self):
-        if self.level == 2:
+        if self.level == 1:
             self.turret_top = turret_lvl2_top
             self.turret_base = turret_lvl2_base
             self.power = 30
             self.velocity = 0.5
             self.range = window_width / 2
-        elif self.level == 3:
+            self.update_price = 150
+            self.level += 1
+        elif self.level == 2:
             self.turret_top = turret_lvl3_top
-            self.turret_base = turret_lvl3_base
+            self.turret_base = turret_lvl2_base
             self.power = 40
             self.velocity = 0.75
             self.range = window_width
-        elif self.level == 4:
+            self.update_price = 250
+            self.level += 1
+        elif self.level == 3:
             self.turret_top = turret_lvl4_top
             self.turret_base = turret_lvl4_base
             self.power = 50
             self.velocity = 1
             self.range = 2 * window_width 
+            self.level += 1
 
     def draw(self,window,turrets,enemies): 
         if self.life <= 0:               
@@ -54,6 +66,24 @@ class Turret(Element):
         window.blit(self.turret_base, (self.x,self.y))
         window.blit(self.turret_top, (self.x,self.y))
         self.life_bar(window)
+
+    def draw_menu_update(self,window,font_size,player,mouse_x,mouse_y):
+        window.blit(upgrade_button,(self.x, self.y - 80))
+        # pygame.draw.rect(window,(0,0,0),(self.x + 5,self.y- 75,40,40),2)
+        font = create_font(font_size)
+        text = font.render(str(self.update_price),1,(0,255,0))
+        window.blit(text,(self.x + 50,self.y - 70 ))
+        # Check if the player pressed the mouse to update the turret
+        if self.mouse_count >= 5:
+            self.mouse_count = 0
+        elif self.mouse_count > 0:
+            self.mouse_count += 1
+        if pygame.mouse.get_pressed()[0] and self.mouse_count == 0 and player.money >= self.update_price:
+            
+            if (self.x + 5 < mouse_x < self.x +45) and (self.y - 75 < mouse_y < self.y - 45):
+                self.mouse_count += 1
+                player.money -= self.update_price
+                self.level_update()
 
 
     def enemy_in_range(self,enemies):
