@@ -2,13 +2,13 @@ import pygame
 from random import randint
 
 import sys
-sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
+sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
 
 from gunslinger_package.loaded_images.menu_images import *
 from gunslinger_package.config import *
 from gunslinger_package.objects_classes.enemy import Enemy
 from gunslinger_package.loaded_images.brown_minotaur_images import brown_minotaur_images
-
+from gunslinger_package.menus.turret_upgrade_menu import TurretMenu
 
 
 def bullet_interaction(bullets,enemies,bullet_power,origin_background):
@@ -129,13 +129,21 @@ def show_money(player,window):
     window.blit(text,(window_width - 100, 25))
     window.blit(coin_image,(window_width-160,25))
     
-def mouse_turret_upgrade(turrets,player,window):
-    ''' Check if the cursor is over the turret to print the turret update menu 
-        option.
-    '''
+# def mouse_turret_upgrade(turrets,player,window):
+#     ''' Check if the cursor is over the turret to print the turret update menu 
+#         option.
+#     '''
+#     for turret in turrets:
+#         if is_cursor_over(turret):
+#             turret.draw_menu_update(window,30,player)
+
+def turret_menu_interaction(turrets,player,window,menu):
+    ''' Call the method interaction for each turret, using the same menu swaping the characteristics. '''
+
     for turret in turrets:
         if is_cursor_over(turret):
-            turret.draw_menu_update(window,30,player)
+            menu.interaction(turret,window,player)
+
 
 def create_font(font_size):
     ''' Create a font with a given font size'''

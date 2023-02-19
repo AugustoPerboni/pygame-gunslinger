@@ -4,12 +4,11 @@ from pygame.locals import *
 from gunslinger_package.config import window_hight,window_width
 from gunslinger_package.objects_classes.player import Player
 from gunslinger_package.objects_classes.enemy import Enemy
-from gunslinger_package.functions import enemy_player_collision,redraw_game_window,bullet_interaction,wave_generator, enemy_turret_collision, show_money, mouse_turret_upgrade
+from gunslinger_package.functions import enemy_player_collision,redraw_game_window,bullet_interaction,wave_generator, enemy_turret_collision, show_money, turret_menu_interaction
 from gunslinger_package.loaded_images.background import background
-from gunslinger_package.loaded_images.brown_minotaur_images import brown_minotaur_images
+from gunslinger_package.menus.turret_upgrade_menu import TurretMenu
 
-
-# Inicializations -----------------------------------------------------------------------------------------#
+# Inicializations ------------------------------------------------------------#
 pygame.init
 pygame.font.init()
 game_window = pygame.display.set_mode((window_width,window_hight))
@@ -28,6 +27,9 @@ prog_run = True
 end_of_screen = window_width
 origin_background = (0,0)
 shoot_time_delay = 0
+
+# Menus
+turret_menu = TurretMenu()
 
 # Game main loop -------------------------------------------------------------#
 while prog_run:
@@ -59,9 +61,9 @@ while prog_run:
 
     # Draw window ------------------------------------------------------------#
     origin_background = redraw_game_window(background,player,bullets,enemies,game_window,end_of_screen,origin_background,turrets,keys,font)
-    
+
         # Mouse interactions and menu draws-----------------------------------#
-    mouse_turret_upgrade(turrets,player,game_window )
+    turret_menu_interaction(turrets,player,game_window,turret_menu)
 
     # Update display ---------------------------------------------------------#
     pygame.display.update()

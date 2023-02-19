@@ -1,5 +1,6 @@
 import sys
-sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
+sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
+
 
 from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.config import window_width

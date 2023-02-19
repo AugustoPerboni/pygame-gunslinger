@@ -1,5 +1,5 @@
 import sys
-sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
+sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
 
 from gunslinger_package.loaded_images.effects_images import image_bullet_left,image_bullet_right
 from gunslinger_package.objects_classes.element import Element

@@ -1,7 +1,7 @@
 import pygame
 
 import sys
-sys.path.append('C:\\Users\\augus\\Desktop\\gunslinger-division')
+sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
 
 from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.loaded_images.turret_images import *
@@ -9,6 +9,7 @@ from gunslinger_package.config import window_width
 from gunslinger_package.objects_classes.projectile import Projectile
 from gunslinger_package.loaded_images.menu_images import upgrade_button
 from gunslinger_package.functions import create_font
+#from gunslinger_package.menu_elements.update_button import UpdateButton
 
 
 
@@ -26,7 +27,7 @@ class Turret(Element):
         self.shoot_time_delay = 0
         self.life_bar_x = x
         self.life_bar_y = 545
-        self.hitbox = (self.x,self.y-80,100,90)
+        self.hitbox = (self.x,self.y-75,100,170)
         self.update_price = 75
         self.mouse_count = 0
 
@@ -71,23 +72,24 @@ class Turret(Element):
     def draw_menu_update(self,window,font_size,player):
         ''' Draw the turret update menu and check if the player has enough money and 
         pressed the update button the level of the turret is increased. '''
-        window.blit(upgrade_button,(self.x, self.y - 80))
-        # pygame.draw.rect(window,(0,0,0),(self.x + 5,self.y- 75,40,40),2)
-        font = create_font(font_size)
-        text = font.render(str(self.update_price),1,(0,255,0))
-        window.blit(text,(self.x + 50,self.y - 70 ))
-        # Check if the player pressed the mouse to update the turret
-        if self.mouse_count >= 5:
-            self.mouse_count = 0
-        elif self.mouse_count > 0:
-            self.mouse_count += 1
-        if pygame.mouse.get_pressed()[0] and self.mouse_count == 0 and player.money >= self.update_price:
-            # The cursor should be over the update arrow
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if (self.x + 5 < mouse_x < self.x +45) and (self.y - 75 < mouse_y < self.y - 45):
+        if self.level <= 3:
+            window.blit(upgrade_button,(self.x, self.y - 80))
+            # pygame.draw.rect(window,(0,0,0),(self.x + 5,self.y- 75,40,40),2)
+            font = create_font(font_size)
+            text = font.render(str(self.update_price),1,(0,255,0))
+            window.blit(text,(self.x + 50,self.y - 70 ))
+            # Check if the player pressed the mouse to update the turret
+            if self.mouse_count >= 5:
+                self.mouse_count = 0
+            elif self.mouse_count > 0:
                 self.mouse_count += 1
-                player.money -= self.update_price
-                self.level_update()
+            if pygame.mouse.get_pressed()[0] and self.mouse_count == 0 and player.money >= self.update_price:
+                # The cursor should be over the update arrow
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if (self.x + 5 < mouse_x < self.x +45) and (self.y - 75 < mouse_y < self.y - 45):
+                    self.mouse_count += 1
+                    player.money -= self.update_price
+                    self.level_update()
 
 
     def enemy_in_range(self,enemies):
