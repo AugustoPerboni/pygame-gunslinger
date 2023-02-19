@@ -28,6 +28,7 @@ class Player(Element):
         self.life_bar_y = 525
         self.money = 1000
         self.key_t_last_state = False
+        self.in_window_second_half = False
 
 
     def draw(self,window,keys):

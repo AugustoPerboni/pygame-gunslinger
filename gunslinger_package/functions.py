@@ -17,7 +17,7 @@ def bullet_interaction(bullets,enemies,bullet_power,origin_background):
     for bullet in bullets:
         
         for enemy in enemies:      
-            if collide(enemy, bullet):
+            if collide(bullet, enemy):
                 enemy.hit(bullet_power)
                 if bullet in bullets: # If used to prevent error in the bullet removal    
                     bullets.pop(bullets.index(bullet))
@@ -53,8 +53,10 @@ def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,or
             turret.x -= window_width
             turret.hitbox = (turret.x,turret.y,100,90)
             turret.life_bar_x = turret.x
+            player.in_window_second_half = True
         #end_of_screen = 2*window_width
     elif (origin_background[0] < 0) and ( player.x < 50 ):
+        player.in_window_second_half = False
         origin_background = (0,0)
         for enemy in enemies:
             enemy.x += window_width
@@ -71,7 +73,7 @@ def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,or
     
     
     # Update the image of bullets
-    [bullet.draw(window) for bullet in bullets]
+    [bullet.draw(window,player) for bullet in bullets]
     # Update the enemy images
     [enemy.draw(window,enemy,enemies,origin_background,player) for enemy in enemies if enemy.name == 'brown_minotaur']
 

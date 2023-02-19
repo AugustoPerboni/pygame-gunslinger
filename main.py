@@ -8,7 +8,7 @@ from gunslinger_package.functions import enemy_player_collision,redraw_game_wind
 from gunslinger_package.loaded_images.background import background
 from gunslinger_package.menus.turret_upgrade_menu import TurretMenu
 
-# Inicializations ------------------------------------------------------------#
+# Inicializations ------------------------------------------------------------ #
 pygame.init
 pygame.font.init()
 game_window = pygame.display.set_mode((window_width,window_hight))
@@ -22,9 +22,8 @@ enemies = []
 turrets = []
 
 # Variables
-wave_number = 1
+wave_number = 0
 prog_run = True
-end_of_screen = window_width
 origin_background = (0,0)
 shoot_time_delay = 0
 
@@ -60,7 +59,7 @@ while prog_run:
     show_money(player,game_window)
 
     # Draw window ------------------------------------------------------------#
-    origin_background = redraw_game_window(background,player,bullets,enemies,game_window,end_of_screen,origin_background,turrets,keys,font)
+    origin_background = redraw_game_window(background,player,bullets,enemies,game_window,window_width,origin_background,turrets,keys,font)
 
         # Mouse interactions and menu draws-----------------------------------#
     turret_menu_interaction(turrets,player,game_window,turret_menu)

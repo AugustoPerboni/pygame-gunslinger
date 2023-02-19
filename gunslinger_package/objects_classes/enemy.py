@@ -26,46 +26,48 @@ class Enemy(Element):
         self.life_bar_y = self.y + 35
 
     def draw(self,window,enemy,enemies,origin_background,player):
-        if self.life <= 0:
-            if self.dead_count + 1 <= len(self.images[1]) and self.walk_right:
-                window.blit(self.images[1][self.dead_count],(self.x,self.y))
-                self.dead_count += 1    
-            elif self.dead_count + 1 <= len(self.images[3]) and self.walk_left:
-                window.blit(self.images[3][self.dead_count],(self.x,self.y))
-                self.dead_count += 1             
-            else:
-                player.money += 5
-                del enemies[enemies.index(enemy)] 
-                
-        else:
-            # Once the enemy move autonomus we add the move in draw
-            self.move(origin_background)
-            
-             # Life bar plot and positioning
-            self.life_bar_x = self.x + 15
-            self.life_bar_y = self.y + 35
-            self.life_bar(window)
-
-            if self.is_hitting:
-                if self.hitting_count + 1 >= 36:
-                    self.hitting_count = 0
+        if player.in_window_second_half and enemy.x > window_width or not player.in_window_second_half and enemy.x < window_width:
+            if self.life <= 0:
+                if self.dead_count + 1 <= len(self.images[1]) and self.walk_right:
+                    window.blit(self.images[1][self.dead_count],(self.x,self.y))
+                    self.dead_count += 1    
+                elif self.dead_count + 1 <= len(self.images[3]) and self.walk_left:
+                    window.blit(self.images[3][self.dead_count],(self.x,self.y))
+                    self.dead_count += 1             
                 else:
-                    self.hitting_count += 1
-                window.blit(self.images[4][self.hitting_count//3], (self.x,self.y + self.height/3))
+                    player.money += 5
+                    del enemies[enemies.index(enemy)] 
+                    
             else:
-                # Each image will be used in 3 frames
-                if self.walk_count +1 >= 54:
-                    self.walk_count = 0         
-
                 
-                if self.walk_right:
-                    window.blit(self.images[0][self.walk_count//3], (self.x,self.y + self.height/3))
-                    self.walk_count += 1
-                elif self.walk_left:
-                    window.blit(self.images[2][self.walk_count//3], (self.x,self.y + self.height/3))
-                    self.walk_count += 1
-                    # Given the irregularity of sides
-                    self.hitbox = (self.x + 25, self.y + 55 ,65,70) 
+                
+                # Life bar plot and positioning
+                self.life_bar_x = self.x + 15
+                self.life_bar_y = self.y + 35
+                self.life_bar(window)
+
+                if self.is_hitting:
+                    if self.hitting_count + 1 >= 36:
+                        self.hitting_count = 0
+                    else:
+                        self.hitting_count += 1
+                    window.blit(self.images[4][self.hitting_count//3], (self.x,self.y + self.height/3))
+                else:
+                    # Each image will be used in 3 frames
+                    if self.walk_count +1 >= 54:
+                        self.walk_count = 0         
+
+                    
+                    if self.walk_right:
+                        window.blit(self.images[0][self.walk_count//3], (self.x,self.y + self.height/3))
+                        self.walk_count += 1
+                    elif self.walk_left:
+                        window.blit(self.images[2][self.walk_count//3], (self.x,self.y + self.height/3))
+                        self.walk_count += 1
+                        # Given the irregularity of sides
+                        self.hitbox = (self.x + 25, self.y + 55 ,65,70) 
+        # Once the enemy move autonomus we add the move in draw
+        self.move(origin_background)
                 
 
         self.hitbox = (self.x + 34, self.y + 55 ,70,70)
