@@ -17,7 +17,6 @@ class Player(Element):
         self.jump_count = 0
         self.is_jump = False 
         self.dead_count = 0
-        self.turret_count = 0
         
         self.stand = True
         self.walk_left = False
@@ -28,6 +27,7 @@ class Player(Element):
         self.life_bar_x = 66
         self.life_bar_y = 525
         self.money = 1000
+        self.key_t_last_state = False
 
 
     def draw(self,window,keys):
@@ -93,18 +93,12 @@ class Player(Element):
             else:
                 self.shoot_time_delay += 1
 
-            
-            if self.turret_count >= 50:
-                self.turret_count = 0
-            elif self.turret_count == 0:
-                pass
-            else:
-                self.turret_count += 1
+            if not keys[pygame.K_t]:
+                self.key_t_last_state = False
+            if keys[pygame.K_t] and not self.key_t_last_state and self.money >= 100: 
 
-            if keys[pygame.K_t] and self.turret_count == 0 and self.money >= 100: 
-                
+                self.key_t_last_state = True
                 turrets.append(Turret(self.x))
-                self.turret_count = 1
                 self.money -= 100
 
             if keys[pygame.K_SPACE] and self.shoot_time_delay == 0 and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_UP]:
