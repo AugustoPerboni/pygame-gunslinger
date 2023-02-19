@@ -21,13 +21,13 @@ class Player(Element):
         
         self.stand = True
         self.walk_left = False
-        self.walk_right = False
+        self.walk_right = True
         self.walk_count = 0
         self.shooting = False
         self.shoot_time_delay = 0
         self.life_bar_x = 66
         self.life_bar_y = 525
-        self.money = 100
+        self.money = 1000
 
 
     def draw(self,window,keys):
@@ -87,84 +87,85 @@ class Player(Element):
             Appends bullet to the list bullets
         '''
         # Shoot time delay counter
-        if self.shoot_time_delay > 10:
-            self.shoot_time_delay = 0
-        else:
-            self.shoot_time_delay += 1
-
-        
-        if self.turret_count >= 50:
-            self.turret_count = 0
-        elif self.turret_count == 0:
-            pass
-        else:
-            self.turret_count += 1
-
-        if keys[pygame.K_t] and self.turret_count == 0 and self.money >= 100: 
-            
-            turrets.append(Turret(self.x))
-            self.turret_count = 1
-            self.money -= 100
-
-        if keys[pygame.K_SPACE] and self.shoot_time_delay == 0 and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_UP]:
-            self.shooting = True
-            if self.walk_left:
-                facing = -1
+        if self.life > 0:
+            if self.shoot_time_delay > 10:
+                self.shoot_time_delay = 0
             else:
-                facing = 1 
+                self.shoot_time_delay += 1
 
-            if len(bullets) < 6:  
-                # Once list is a mutable object we can append ellements to it
-                bullets.append(Projectile((self.x + self.width//2),(self.y + self.height//1.5),facing))
-        else:
-            self.shooting = False
-
-        if keys[pygame.K_UP] and not self.is_jump and keys[pygame.K_RIGHT]:
-            self.stand = False 
-            self.walk_right = True
-            self.is_jump = True
-            self.jump_count = 10
-        elif keys[pygame.K_UP] and not self.is_jump and keys[pygame.K_LEFT]:
-            self.stand = False 
-            self.walk_left = True
-            self.is_jump = True
-            self.jump_count = 10
-        elif keys[pygame.K_UP] and not self.is_jump:
-            self.stand = True 
-            self.is_jump = True
-            self.jump_count = 10
-        elif keys[pygame.K_LEFT]:
-            self.stand = False
-            self.walk_left = True
-            self.walk_right = False
-            if self.x > 0 :
-                self.x -= self.velocity
-        elif keys[pygame.K_RIGHT]:
-            self.stand = False
-            self.walk_left = False
-            self.walk_right = True
-            # if self.x < window_width - 64 :
-            #     self.x += self.velocity  
-            self.x += self.velocity         
-        else:
-            if not self.is_jump:
-                self.stand = True
             
-
-        if self.is_jump:     
-            self.velocity = 7   
-            if self.jump_count > 0:
-                self.y = (self.y - (self.jump_count**2)* 0.5)
-                self.jump_count -= 1
-            elif self.jump_count <= 0 and self.jump_count >= - 10:
-                self.y = (self.y + (self.jump_count**2)* 0.5)
-                self.jump_count -= 1
+            if self.turret_count >= 50:
+                self.turret_count = 0
+            elif self.turret_count == 0:
+                pass
             else:
-                self.jump_count = 0 
-                self.is_jump = False
-                self.stand = True
-                self.velocity = 5
-        self.hitbox = (self.x + 17, self.y + 11, 25, 52 )
+                self.turret_count += 1
+
+            if keys[pygame.K_t] and self.turret_count == 0 and self.money >= 100: 
+                
+                turrets.append(Turret(self.x))
+                self.turret_count = 1
+                self.money -= 100
+
+            if keys[pygame.K_SPACE] and self.shoot_time_delay == 0 and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_UP]:
+                self.shooting = True
+                if self.walk_left:
+                    facing = -1
+                else:
+                    facing = 1 
+
+                if len(bullets) < 6:  
+                    # Once list is a mutable object we can append ellements to it
+                    bullets.append(Projectile((self.x + self.width//2),(self.y + self.height//1.5),facing))
+            else:
+                self.shooting = False
+
+            if keys[pygame.K_UP] and not self.is_jump and keys[pygame.K_RIGHT]:
+                self.stand = False 
+                self.walk_right = True
+                self.is_jump = True
+                self.jump_count = 10
+            elif keys[pygame.K_UP] and not self.is_jump and keys[pygame.K_LEFT]:
+                self.stand = False 
+                self.walk_left = True
+                self.is_jump = True
+                self.jump_count = 10
+            elif keys[pygame.K_UP] and not self.is_jump:
+                self.stand = True 
+                self.is_jump = True
+                self.jump_count = 10
+            elif keys[pygame.K_LEFT]:
+                self.stand = False
+                self.walk_left = True
+                self.walk_right = False
+                if self.x > 0 :
+                    self.x -= self.velocity
+            elif keys[pygame.K_RIGHT]:
+                self.stand = False
+                self.walk_left = False
+                self.walk_right = True
+                # if self.x < window_width - 64 :
+                #     self.x += self.velocity  
+                self.x += self.velocity         
+            else:
+                if not self.is_jump:
+                    self.stand = True
+                
+
+            if self.is_jump:     
+                self.velocity = 7   
+                if self.jump_count > 0:
+                    self.y = (self.y - (self.jump_count**2)* 0.5)
+                    self.jump_count -= 1
+                elif self.jump_count <= 0 and self.jump_count >= - 10:
+                    self.y = (self.y + (self.jump_count**2)* 0.5)
+                    self.jump_count -= 1
+                else:
+                    self.jump_count = 0 
+                    self.is_jump = False
+                    self.stand = True
+                    self.velocity = 5
+            self.hitbox = (self.x + 17, self.y + 11, 25, 52 )
     
     def hit(self, damage):
         self.life -= damage

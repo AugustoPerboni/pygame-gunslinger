@@ -61,7 +61,7 @@ while prog_run:
     origin_background = redraw_game_window(background,player,bullets,enemies,game_window,end_of_screen,origin_background,turrets,keys,font)
     
         # Mouse interactions and menu draws-----------------------------------#
-    mouse_turret_upgrade(turrets,player,game_window,font)
+    mouse_turret_upgrade(turrets,player,game_window )
 
     # Update display ---------------------------------------------------------#
     pygame.display.update()

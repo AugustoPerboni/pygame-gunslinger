@@ -16,8 +16,8 @@ def bullet_interaction(bullets,enemies,bullet_power,origin_background):
   
     for bullet in bullets:
         
-        for enemy in enemies:
-            if (enemy.hitbox[0] < (bullet.hitbox[0]+bullet.hitbox[2]/2) < (enemy.hitbox[0] + enemy.hitbox[2])) and( enemy.hitbox[1]< (bullet.hitbox[1]+bullet.hitbox[3]/2) < (enemy.hitbox[1] + enemy.hitbox[3])):
+        for enemy in enemies:      
+            if collide(enemy, bullet):
                 enemy.hit(bullet_power)
                 if bullet in bullets: # If used to prevent error in the bullet removal    
                     bullets.pop(bullets.index(bullet))
@@ -34,11 +34,7 @@ def enemy_player_collision(enemies,player):
     ''' Calls player.hit if the player collide with an enemy.'''
 
     for enemy in enemies:
-        if (player.hitbox[1] + player.hitbox[2]) > enemy.hitbox[1]:
-            
-            if enemy.hitbox[0]< player.hitbox[0] < (enemy.hitbox[0] + enemy.hitbox[2]):
-                player.hit(enemy.power)
-            elif enemy.hitbox[0] < (player.hitbox[0] + player.hitbox[2]) < (enemy.hitbox[0] + enemy.hitbox[2]):
+        if collide(player,enemy):
                 player.hit(enemy.power)
   
 def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,origin_background,turrets,keys,font): 
@@ -107,7 +103,7 @@ def enemy_turret_collision(enemies,turrets):
 
     for turret in turrets: 
         for enemy in enemies:
-            if  turret.hitbox[0] < enemy.hitbox[0] <= turret.hitbox[0] + turret.hitbox[2]:
+            if collide(turret,enemy):
                 enemy.is_hitting = True
                 if enemy.hitting_count == 24:
                     turret.hit(enemy.power)
@@ -126,17 +122,39 @@ def turret_insert_index(turrets,x):
             return len(turrets)
                 
 def show_money(player,window):
+    ''' Print in the game window the total money of the player'''
     #window.blit(barra_coin,(window_width-195,15))
     font = create_font(45)
     text = font.render(str(player.money) ,1,(255,255,0))
     window.blit(text,(window_width - 100, 25))
     window.blit(coin_image,(window_width-160,25))
     
-def mouse_turret_upgrade(turrets,player,window,font):
-    mouse_x, mouse_y = pygame.mouse.get_pos()
+def mouse_turret_upgrade(turrets,player,window):
+    ''' Check if the cursor is over the turret to print the turret update menu 
+        option.
+    '''
     for turret in turrets:
-        if (turret.hitbox[0] < mouse_x < turret.hitbox[0] + turret.hitbox[2] ) and (turret.hitbox[1] - 80  < mouse_y < turret.hitbox[1] + turret.hitbox[3] ):
-            turret.draw_menu_update(window,30,player,mouse_x,mouse_y)
+        if is_cursor_over(turret):
+            turret.draw_menu_update(window,30,player)
 
 def create_font(font_size):
+    ''' Create a font with a given font size'''
     return pygame.font.SysFont("Times New Roman", font_size, True)
+
+def collide(element_1,element_2):
+    ''' Check if the two elements' hitbox collides. '''
+
+    if ( element_2.hitbox[0] < (element_1.hitbox[0] + element_1.hitbox[2]) < (element_2.hitbox[0] + element_2.hitbox[2]) ) or ( element_1.hitbox[0] < (element_2.hitbox[0] + element_2.hitbox[2]) < (element_1.hitbox[0] + element_1.hitbox[2]) ):
+        if (element_2.hitbox[1] < element_1.hitbox[1] + element_1.hitbox[3]):
+            return True
+    else:
+        return False
+    
+def is_cursor_over(element):
+    ''' Check if the mouse cursor is inside the element hitbox.'''
+    cursor_x, cursor_y = pygame.mouse.get_pos()
+    if element.hitbox[0] < cursor_x < element.hitbox[0] + element.hitbox[2]:
+        if element.hitbox[1] < cursor_y < element.hitbox[1] + element.hitbox[3]:
+            return True
+    else:
+        return False

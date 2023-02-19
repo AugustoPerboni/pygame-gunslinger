@@ -11,6 +11,7 @@ from gunslinger_package.loaded_images.menu_images import upgrade_button
 from gunslinger_package.functions import create_font
 
 
+
 class Turret(Element):
     
     def __init__(self,x):
@@ -25,7 +26,7 @@ class Turret(Element):
         self.shoot_time_delay = 0
         self.life_bar_x = x
         self.life_bar_y = 545
-        self.hitbox = (self.x,self.y,100,90)
+        self.hitbox = (self.x,self.y-80,100,90)
         self.update_price = 75
         self.mouse_count = 0
 
@@ -67,7 +68,9 @@ class Turret(Element):
         window.blit(self.turret_top, (self.x,self.y))
         self.life_bar(window)
 
-    def draw_menu_update(self,window,font_size,player,mouse_x,mouse_y):
+    def draw_menu_update(self,window,font_size,player):
+        ''' Draw the turret update menu and check if the player has enough money and 
+        pressed the update button the level of the turret is increased. '''
         window.blit(upgrade_button,(self.x, self.y - 80))
         # pygame.draw.rect(window,(0,0,0),(self.x + 5,self.y- 75,40,40),2)
         font = create_font(font_size)
@@ -79,7 +82,8 @@ class Turret(Element):
         elif self.mouse_count > 0:
             self.mouse_count += 1
         if pygame.mouse.get_pressed()[0] and self.mouse_count == 0 and player.money >= self.update_price:
-            
+            # The cursor should be over the update arrow
+            mouse_x, mouse_y = pygame.mouse.get_pos()
             if (self.x + 5 < mouse_x < self.x +45) and (self.y - 75 < mouse_y < self.y - 45):
                 self.mouse_count += 1
                 player.money -= self.update_price
