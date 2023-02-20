@@ -8,7 +8,7 @@ from gunslinger_package.loaded_images.menu_images import *
 from gunslinger_package.config import *
 from gunslinger_package.objects_classes.enemy import Enemy
 from gunslinger_package.loaded_images.brown_minotaur_images import brown_minotaur_images
-from gunslinger_package.menus.turret_upgrade_menu import TurretMenu
+from gunslinger_package.menus.turret_menu import TurretMenu
 
 
 def bullet_interaction(bullets,enemies,bullet_power,origin_background):
@@ -83,7 +83,7 @@ def redraw_game_window(background,player,bullets,enemies,window,end_of_screen,or
         turret.draw(window,turrets,enemies)
         turret.shoot(enemies)
         for bullet in turret.bullets:
-            bullet.draw(window)
+            bullet.draw(window,player)
 
     # Draw player in the end to be infront of all the other objects 
     player.draw(window,keys)

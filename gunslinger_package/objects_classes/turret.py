@@ -7,7 +7,7 @@ from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.loaded_images.turret_images import *
 from gunslinger_package.config import window_width
 from gunslinger_package.objects_classes.projectile import Projectile
-from gunslinger_package.loaded_images.menu_images import upgrade_button
+from gunslinger_package.loaded_images.menu_images import turret_upgrade_button
 from gunslinger_package.functions import create_font
 #from gunslinger_package.menu_elements.update_button import UpdateButton
 
@@ -73,7 +73,7 @@ class Turret(Element):
         ''' Draw the turret update menu and check if the player has enough money and 
         pressed the update button the level of the turret is increased. '''
         if self.level <= 3:
-            window.blit(upgrade_button,(self.x, self.y - 80))
+            window.blit(turret_upgrade_button,(self.x, self.y - 80))
             # pygame.draw.rect(window,(0,0,0),(self.x + 5,self.y- 75,40,40),2)
             font = create_font(font_size)
             text = font.render(str(self.update_price),1,(0,255,0))
