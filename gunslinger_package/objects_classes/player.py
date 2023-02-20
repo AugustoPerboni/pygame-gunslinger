@@ -11,7 +11,7 @@ from gunslinger_package.functions import turret_insert_index
 class Player(Element):
 
     def __init__(self):
-        Element.__init__(self,50,525,64,64,5,30)
+        Element.__init__(self,50,525,64,64,5,10)
 
         self.hitbox = (self.x + 38, self.y + 15, 66, 90)
         self.jump_count = 0
@@ -30,6 +30,19 @@ class Player(Element):
         self.key_t_last_state = False
         self.in_window_second_half = False
 
+        # Update characteristics ---------------------------------------------#
+
+        # Power
+        self.power_level = 0
+        self.power_update_price = 100
+
+        # Life
+        self.life_level = 0
+        self.life_update_price = 100
+
+        # Shoot Speed
+        self.shoot_speed_level = 0
+        self.shoot_speed_update_price = 100
 
     def draw(self,window,keys):
         
@@ -92,7 +105,7 @@ class Player(Element):
             if self.shoot_time_delay > 10:
                 self.shoot_time_delay = 0
             else:
-                self.shoot_time_delay += 1
+                self.shoot_time_delay += 1 * (self.shoot_speed_level+1)
 
             if not keys[pygame.K_t]:
                 self.key_t_last_state = False
@@ -109,7 +122,7 @@ class Player(Element):
                 else:
                     facing = 1 
 
-                if len(bullets) < 6:  
+                if len(bullets) < 30:  
                     # Once list is a mutable object we can append ellements to it
                     bullets.append(Projectile((self.x + self.width//2),(self.y + self.height//1.5),facing))
             else:
@@ -163,5 +176,36 @@ class Player(Element):
             self.hitbox = (self.x + 17, self.y + 11, 25, 52 )
     
     def hit(self, damage):
+
         self.life -= damage
         # print('PLAYER HIT')
+
+    def power_update(self):
+
+        if self.money >= self.power_update_price:
+            self.money -= self.power_update_price
+            self.power_level += 1
+            self.power += 10
+            self.power_update_price += 25
+                         
+    def life_update(self):
+
+        if self.money >= self.life_update_price:
+            self.money -= self.life_update_price
+            self.life_level += 1
+            self.max_life += 100
+            self.life = self.max_life
+            self.life_update_price += 25
+
+        self.life = self.max_life
+        self.money -= self.life_update_price
+
+    def shoot_speed_update(self):
+
+        if self.money >= self.shoot_speed_update_price:
+            self.money -= self.shoot_speed_update_price
+            self.shoot_speed_level += 1
+            self.shoot_speed_update_price += 25
+
+
+

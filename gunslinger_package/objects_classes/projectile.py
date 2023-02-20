@@ -9,7 +9,7 @@ from gunslinger_package.config import *
 class Projectile(Element):
 
     def __init__(self,x,y,facing):
-        Element.__init__(self,x,y,128,128,10,1 ) # Player width and Height
+        Element.__init__(self,x,y,128,128,20,1 ) # Player width and Height
         self.hitbox = () # (self.x + 100 ,self.y,64,128)
         # 1 = right, -1 = left
         self.facing = facing

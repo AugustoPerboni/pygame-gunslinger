@@ -6,7 +6,8 @@ from gunslinger_package.objects_classes.player import Player
 from gunslinger_package.objects_classes.enemy import Enemy
 from gunslinger_package.functions import enemy_player_collision,redraw_game_window,bullet_interaction,wave_generator, enemy_turret_collision, show_money, turret_menu_interaction
 from gunslinger_package.loaded_images.background import background
-from gunslinger_package.menus.turret_upgrade_menu import TurretMenu
+from gunslinger_package.menus.turret_menu import TurretMenu
+from gunslinger_package.menus.player_menu import PlayerMenu
 
 # Inicializations ------------------------------------------------------------ #
 pygame.init
@@ -29,6 +30,7 @@ shoot_time_delay = 0
 
 # Menus
 turret_menu = TurretMenu()
+player_menu = PlayerMenu()
 
 # Game main loop -------------------------------------------------------------#
 while prog_run:
@@ -52,9 +54,6 @@ while prog_run:
     enemy_player_collision(enemies,player)
     enemy_turret_collision(enemies,turrets)
 
-    
-
-
     player.move(bullets,turrets,keys)
     show_money(player,game_window)
 
@@ -63,7 +62,8 @@ while prog_run:
 
         # Mouse interactions and menu draws-----------------------------------#
     turret_menu_interaction(turrets,player,game_window,turret_menu)
-
+    player_menu.interaction(game_window,player)
+   
     # Update display ---------------------------------------------------------#
     pygame.display.update()
     
