@@ -1,3 +1,5 @@
+import pygame
+
 import sys
 sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
 
@@ -8,6 +10,7 @@ from gunslinger_package.config import window_width
 class Enemy(Element):
     ''' Define the game enemies. '''
 
+    
     def __init__(self,x,speed,power,images,name):
         Element.__init__(self,x,515,128,128,speed,power) # 3
 
@@ -18,6 +21,8 @@ class Enemy(Element):
         self.dead_count = 0
         self.is_hitting = False
         self.hitting_count = 0
+        
+        self.dying_sound = pygame.mixer.Sound('sounds\dying-zombie.wav')
 
         # Used to differentiate each kind of enemy
         self.images = images  
@@ -36,11 +41,10 @@ class Enemy(Element):
                     self.dead_count += 1             
                 else:
                     player.money += 5
+                    self.dying_sound.play()
                     del enemies[enemies.index(enemy)] 
                     
             else:
-                
-                
                 # Life bar plot and positioning
                 self.life_bar_x = self.x + 15
                 self.life_bar_y = self.y + 35
@@ -56,7 +60,6 @@ class Enemy(Element):
                     # Each image will be used in 3 frames
                     if self.walk_count +1 >= 54:
                         self.walk_count = 0         
-
                     
                     if self.walk_right:
                         window.blit(self.images[0][self.walk_count//3], (self.x,self.y + self.height/3))

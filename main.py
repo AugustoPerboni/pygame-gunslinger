@@ -12,6 +12,7 @@ from gunslinger_package.menus.player_menu import PlayerMenu
 # Inicializations ------------------------------------------------------------ #
 pygame.init
 pygame.font.init()
+pygame.mixer.init()
 game_window = pygame.display.set_mode((window_width,window_hight))
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Times New Roman", 45, True)
@@ -32,6 +33,8 @@ shoot_time_delay = 0
 turret_menu = TurretMenu()
 player_menu = PlayerMenu()
 
+background_music = pygame.mixer.music.load('sounds\\background-music.wav')
+pygame.mixer.music.play(-1)
 # Game main loop -------------------------------------------------------------#
 while prog_run:
     clock.tick(27) # Make the fresh rate lower than 27 fps 

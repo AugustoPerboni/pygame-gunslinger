@@ -30,6 +30,8 @@ class Player(Element):
         self.key_t_last_state = False
         self.in_window_second_half = False
 
+        self.shoot_sound = pygame.mixer.Sound('sounds\pistol-shoot-sound.wav')
+        self.lose_sound = pygame.mixer.Sound('sounds\player-dying.wav')
         # Update characteristics ---------------------------------------------#
 
         # Power
@@ -47,12 +49,18 @@ class Player(Element):
     def draw(self,window,keys):
         
         if self.life <= 0:
+            if self.dead_count == 0:
+                self.lose_sound.play()
+                pygame.mixer.music.stop()
+
             if self.dead_count + 1 <= 24 and self.walk_right:
                 window.blit(player_image_dead_right[self.dead_count//3],(self.x,self.y))
                 self.dead_count += 1    
             elif self.dead_count + 1 <= 24 and self.walk_left:
                 window.blit(player_image_dead_left[self.dead_count//3],(self.x,self.y))
                 self.dead_count += 1             
+            if self.dead_count<= 80:   
+                self.dead_count += 1          
             else:
                 quit()
         else:
@@ -125,6 +133,7 @@ class Player(Element):
                 if len(bullets) < 30:  
                     # Once list is a mutable object we can append ellements to it
                     bullets.append(Projectile((self.x + self.width//2),(self.y + self.height//1.5),facing))
+                    self.shoot_sound.play()
             else:
                 self.shooting = False
 
@@ -181,7 +190,6 @@ class Player(Element):
         # print('PLAYER HIT')
 
     def power_update(self):
-
         if self.money >= self.power_update_price:
             self.money -= self.power_update_price
             self.power_level += 1
@@ -189,7 +197,6 @@ class Player(Element):
             self.power_update_price += 25
                          
     def life_update(self):
-
         if self.money >= self.life_update_price:
             self.money -= self.life_update_price
             self.life_level += 1
@@ -197,11 +204,7 @@ class Player(Element):
             self.life = self.max_life
             self.life_update_price += 25
 
-        self.life = self.max_life
-        self.money -= self.life_update_price
-
     def shoot_speed_update(self):
-
         if self.money >= self.shoot_speed_update_price:
             self.money -= self.shoot_speed_update_price
             self.shoot_speed_level += 1

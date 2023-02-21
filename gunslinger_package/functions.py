@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import randint, uniform
 
 import sys
 sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\gunslinger-division')
@@ -95,7 +95,7 @@ def wave_generator(enemies,wave_number):
     # One speed point takes 22 seconds to cross the game window
     i = 0
     for i in range((wave_number + 2)**2):
-        x = randint(window_width, window_width*(wave_number))
+        x = uniform(window_width, window_width*(wave_number))
         speed = randint(1,wave_number*2)
         power = randint(1,wave_number*2)
         enemies.append(Enemy(x,speed,power,brown_minotaur_images,'brown_minotaur'))
