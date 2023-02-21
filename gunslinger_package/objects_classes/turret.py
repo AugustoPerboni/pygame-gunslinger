@@ -5,6 +5,7 @@ sys.path.append('C:\\Users\\augus\\Desktop\\pythonScripts\\General\\myProjects\\
 
 from gunslinger_package.objects_classes.element import Element
 from gunslinger_package.loaded_images.turret_images import *
+from gunslinger_package.loaded_images.effects_images import image_turret_bullet
 from gunslinger_package.config import window_width
 from gunslinger_package.objects_classes.projectile import Projectile
 from gunslinger_package.loaded_images.menu_images import turret_upgrade_button
@@ -31,6 +32,9 @@ class Turret(Element):
         self.update_price = 75
         self.mouse_count = 0
 
+        self.image_bullet = image_turret_bullet
+        self.shoot_sound = pygame.mixer.Sound('sounds\\turret_lvl1_shoot.wav')
+
     def level_update(self):
         if self.level == 1:
             self.turret_top = turret_lvl2_top
@@ -40,6 +44,7 @@ class Turret(Element):
             self.range = window_width / 2
             self.update_price = 150
             self.level += 1
+            self.shoot_sound = pygame.mixer.Sound('sounds\\turret_lvl2_shoot.wav')
         elif self.level == 2:
             self.turret_top = turret_lvl3_top
             self.turret_base = turret_lvl2_base
@@ -55,6 +60,7 @@ class Turret(Element):
             self.velocity = 1
             self.range = 2 * window_width 
             self.level += 1
+            self.shoot_sound = pygame.mixer.Sound('sounds\\turret_lvl4_shoot.wav')
 
     def draw(self,window,turrets,enemies): 
         if self.life <= 0:               
@@ -96,7 +102,7 @@ class Turret(Element):
         ''' Check if there is any enemy in turret's shooting range '''
         enemy_close = False
         for enemy in enemies:
-            if abs(self.x - enemy.x):
+            if abs(self.x - enemy.x) < self.range:
                 enemy_close = True
         if enemy_close:
             self.is_shooting = True
@@ -107,8 +113,9 @@ class Turret(Element):
         self.enemy_in_range(enemies)
 
         if self.is_shooting and self.shoot_time_delay == 0:
-            bullet = Projectile(self.x,self.y,1)
+            bullet = Projectile(self.x + 2,self.y + 4,1,self.image_bullet)
             bullet.hitbox = (self.x + 115 ,self.y + 7 ,20,10)
+            self.shoot_sound.play()
             self.bullets.append(bullet)
         
         if self.shoot_time_delay >= (25 / self.velocity):

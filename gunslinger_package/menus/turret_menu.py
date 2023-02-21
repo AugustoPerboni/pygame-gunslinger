@@ -42,4 +42,5 @@ class TurretMenu:
                 if is_cursor_over(self.upgrade_button):
                     player.money -= turret.update_price
                     turret.level_update()
+                    player.money_spent_sound.play()
 

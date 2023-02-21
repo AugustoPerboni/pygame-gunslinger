@@ -31,7 +31,8 @@ class Player(Element):
         self.in_window_second_half = False
 
         self.shoot_sound = pygame.mixer.Sound('sounds\pistol-shoot-sound.wav')
-        self.lose_sound = pygame.mixer.Sound('sounds\player-dying.wav')
+        self.lose_sound = pygame.mixer.Sound('sounds\player-dying.wav')  
+        self.money_spent_sound = pygame.mixer.Sound('sounds\\coin-sound.wav')
         # Update characteristics ---------------------------------------------#
 
         # Power
@@ -122,6 +123,7 @@ class Player(Element):
                 self.key_t_last_state = True
                 turrets.append(Turret(self.x))
                 self.money -= 100
+                self.money_spent_sound.play()
 
             if keys[pygame.K_SPACE] and self.shoot_time_delay == 0 and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_UP]:
                 self.shooting = True
@@ -195,6 +197,7 @@ class Player(Element):
             self.power_level += 1
             self.power += 10
             self.power_update_price += 25
+            self.money_spent_sound.play()
                          
     def life_update(self):
         if self.money >= self.life_update_price:
@@ -203,12 +206,14 @@ class Player(Element):
             self.max_life += 100
             self.life = self.max_life
             self.life_update_price += 25
+            self.money_spent_sound.play()
 
     def shoot_speed_update(self):
         if self.money >= self.shoot_speed_update_price:
             self.money -= self.shoot_speed_update_price
             self.shoot_speed_level += 1
             self.shoot_speed_update_price += 25
+            self.money_spent_sound.play()
 
 
 
